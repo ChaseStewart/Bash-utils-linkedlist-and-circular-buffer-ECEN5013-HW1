@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Grab type from LSB file
+TYPE=`cat /etc/lsb-release | sed -n -e 's/DISTRIB_ID=//p'`
+
+# Grab version details from OS file
+DIST=`cat /etc/os-release  | sed -n -e 's/VERSION=\"//p'`
+DIST=`echo "$DIST" | sed -n -e 's/\"//p'`
+
+# Grab Kernel Versioning and information
+SYS_ARCH=`lscpu`
+KRN_V=`uname -r`
+KRN_I=`cat /proc/version`
+INFO_ARRAY=($KRN_I)
+
+# Get Kernel build information
+KRN_BUILD=`echo "${INFO_ARRAY[0]} \
+${INFO_ARRAY[1]} \
+${INFO_ARRAY[2]} \
+${INFO_ARRAY[3]} \
+${INFO_ARRAY[12]}"`
+
+# Get GCC Version used to build Kernel
+GCC_V=`echo "${INFO_ARRAY[5]} \
+${INFO_ARRAY[6]} \
+${INFO_ARRAY[7]} \
+${INFO_ARRAY[8]} \
+${INFO_ARRAY[9]}"`
+
+# Get Build Type
+BUILD_T=`echo "${INFO_ARRAY[13]} \
+${INFO_ARRAY[14]} \
+${INFO_ARRAY[15]} \
+${INFO_ARRAY[16]} \
+${INFO_ARRAY[17]} \
+${INFO_ARRAY[18]}"`
+
+
+echo ""
+echo "***System Info***"
+echo "RELEASE: $TYPE"
+echo "DISTRIB: $DIST"
+echo "KERNEL VERSION: $KRN_V"
+echo "KERNEL INFO: $KRN_BUILD"
+echo "GCC VERS: $GCC_V"
+echo "BUILD TIME: $BUILD_T"
+echo ""
+echo "***System Architecture***"
+echo "$SYS_ARCH"
