@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd $HOME/linux-4.12.10
+cp /boot/config-`uname -r`* .config
+make defconfig
+make
+sudo make modules_install install
+sed -n -e "s/GRUB_HIDDEN_TIMEOUT_QUIET=true/#GRUB_HIDDEN_TIMEOUT_QUIET=true/g" /etc/default/grub
+sed -n -e "s/GRUB_DEFAULT=0/#GRUB_DEFAULT=10/g" /etc/default/grub
+
+
+
