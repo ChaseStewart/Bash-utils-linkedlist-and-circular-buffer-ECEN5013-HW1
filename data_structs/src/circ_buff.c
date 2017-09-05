@@ -25,12 +25,12 @@
 #include "../inc/circ_buff.h"
 
 enum circ_buff_errors{
-	C_SUCCESS = 0,
-	C_INVALID_BUFFER= -1,
-	C_CANNOT_ALLOC= -2,
-	C_DOUBLE_FREE= -3,
-	C_BUFFER_FULL= -4,
-	C_BUFFER_EMPTY= -5
+	C_SUCCESS        =  0,
+	C_INVALID_BUFFER = -1,
+	C_CANNOT_ALLOC   = -2,
+	C_DOUBLE_FREE    = -3,
+	C_BUFFER_FULL    = -4,
+	C_BUFFER_EMPTY   = -5
 };
 
 /**

@@ -22,7 +22,11 @@
 
 #include <stdint.h>
 
-struct dbl_ll_node;
+struct dbl_ll_node {
+	uint32_t data;
+	struct dbl_ll_node *prev;
+	struct dbl_ll_node *next;
+};
 
 /**
  * @brief
@@ -33,7 +37,7 @@ struct dbl_ll_node;
  *
  * @return
  */
-uint8_t destroy(struct dbl_ll_node *ptr);
+uint8_t destroy_dbl_ll(struct dbl_ll_node *ptr);
 
 /**
  * @brief
@@ -44,7 +48,7 @@ uint8_t destroy(struct dbl_ll_node *ptr);
  *
  * @return
  */
-uint8_t add_node(uint8_t *ptr, uint8_t value);
+uint8_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_t idx);
 
 /**
  * @brief
@@ -55,7 +59,7 @@ uint8_t add_node(uint8_t *ptr, uint8_t value);
  *
  * @return
  */
-uint8_t remove_node(uint8_t *ptr, uint8_t value);
+uint8_t remove_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t idx);
 
 /**
  * @brief
@@ -66,7 +70,7 @@ uint8_t remove_node(uint8_t *ptr, uint8_t value);
  *
  * @return
  */
-uint8_t search(uint8_t *ptr, uint8_t value);
+uint32_t search_dbl_ll(struct dbl_ll_node *ptr, uint32_t value);
 
 /**
  * @brief
@@ -77,6 +81,6 @@ uint8_t search(uint8_t *ptr, uint8_t value);
  *
  * @return
  */
-uint32_t size(struct dbl_ll_node *ptr);
+uint32_t dbl_ll_size(struct dbl_ll_node *ptr);
 
 #endif /* __MY_DBL_LINKLIST_H__ */
