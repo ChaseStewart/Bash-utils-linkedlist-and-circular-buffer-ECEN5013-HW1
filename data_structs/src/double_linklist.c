@@ -189,8 +189,8 @@ uint32_t dbl_ll_size(struct dbl_ll_node *ptr)
 	{
 		return DBL_INVALID_LL;
 	}
-	uint32_t counter = 1;
-	while (ptr->next != NULL)
+	uint32_t counter = 0;
+	while (ptr != NULL)
 	{
 		ptr = ptr->next;
 		counter++;

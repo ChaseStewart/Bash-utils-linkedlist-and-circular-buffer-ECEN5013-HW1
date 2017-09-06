@@ -110,12 +110,10 @@ bool is_c_buff_full(struct c_node *ptr)
 	{
 		if ( ptr->num_items == ptr->size)
 		{
-			printf("Buffer is full\n");
 			return true;
 		}
 		else
 		{
-			printf("Buffer num_items is %d\n", ptr->num_items);
 			return false;
 		}
 	}
@@ -142,12 +140,10 @@ bool is_c_buff_empty(struct c_node *ptr)
 	{
 		if ( ptr->num_items == 0)
 		{
-			printf("Buffer is empty\n");
 			return true;
 		}
 		else
 		{
-			printf("Buffer num_items is %d\n", ptr->num_items);
 			return false;
 		}
 	}
@@ -168,14 +164,18 @@ circ_buff_status_t add_c_buff_data(struct c_node *ptr, uint32_t data)
 	{
 		return C_INVALID_BUFFER;
 	}
-	else if (ptr->size == ptr->num_items)
+	else if (is_c_buff_full(ptr))
 	{
 		return C_BUFFER_FULL;
 	}
 
-	*ptr->head = data;
-	ptr->head += sizeof(uint32_t);
-	ptr->num_items ++;
+	*(ptr->head) = data;
+	ptr->head ++;
+	if (ptr->head == (ptr->base_p + (sizeof(uint32_t)* ptr->size )))
+	{
+		ptr->head = ptr->base_p;
+	}
+	ptr->num_items++;
 
 	return C_SUCCESS;
 }
@@ -189,17 +189,23 @@ circ_buff_status_t add_c_buff_data(struct c_node *ptr, uint32_t data)
  *
  * @return
  */
-circ_buff_status_t remove_c_buff_node(struct c_node *ptr)
+circ_buff_status_t remove_c_buff_data(struct c_node *ptr)
 {
 	if (!ptr)
 	{
 		return C_INVALID_BUFFER;
 	}
-	else if (ptr->num_items == 0)
+	else if (is_c_buff_empty(ptr))
 	{
 		return C_BUFFER_EMPTY;
 	}
 
+	ptr->tail++;
+	if (ptr->tail == (ptr->base_p + (sizeof(uint32_t)* ptr->size )))
+	{
+		ptr->tail = ptr->base_p;
+	}
+	ptr->num_items--;
 	return C_SUCCESS;
 }
 
@@ -219,24 +225,32 @@ void dump_c_buff(struct c_node *ptr)
 		printf("ERROR: Invalid Buffer\n");
 		return;
 	}
-	else if (ptr->num_items == 0)
+	else if (is_c_buff_empty(ptr))
 	{
 		printf("[]");
 		return;
 	}
 	
-	uint32_t alloc_size = 100 + ( ptr->num_items*10);
-	char print_str[alloc_size];
+	printf("*** Circ Buffer ***\n");
+	printf("note: '^'=start '*'=end\n");
+	printf("\n[ ");
+	uint32_t *temp_ptr = NULL;
+	temp_ptr = ptr->base_p;
 
-	sprintf(print_str, "[ %d", ptr->base_p[0]);
-	
-	for (uint32_t idx=1; idx<ptr->num_items; idx++)
+	for (uint32_t idx=1; idx<(ptr->num_items) -1; idx++)
 	{
-		char snippet[100];
-		sprintf(snippet, ", %d", ptr->base_p[idx]);
-		strcpy(print_str, snippet);
+		if (temp_ptr == ptr->head)
+		{
+			printf("^");
+		}
+		if (temp_ptr == ptr->tail)
+		{
+			printf("*");
+		}
+		printf("%d, ", *temp_ptr);
+		temp_ptr++;
 	}
-	printf("%s", print_str);
+	printf("%d ]\n", *temp_ptr);
 	return;
 }
 

@@ -97,7 +97,7 @@ bool is_c_buff_empty(struct c_node *ptr);
  *
  * @return
  */
-circ_buff_status_t  add_c_buff_node(struct c_node *ptr);
+circ_buff_status_t  add_c_buff_data(struct c_node *ptr, uint32_t data);
 
 /**
  * @brief
@@ -108,7 +108,7 @@ circ_buff_status_t  add_c_buff_node(struct c_node *ptr);
  *
  * @return
  */
-circ_buff_status_t remove_c_buff_node(struct c_node *ptr);
+circ_buff_status_t remove_c_buff_data(struct c_node *ptr);
 
 /**
  * @brief print current status of circular buffer to stdout
