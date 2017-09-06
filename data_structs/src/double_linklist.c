@@ -23,14 +23,6 @@
 #include <stdbool.h>
 #include "../inc/double_linklist.h"
 
-enum dbl_ll_errors{
-	DBL_SUCCESS      =  0,
-	DBL_INVALID_LL   = -1,
-	DBL_CANNOT_ALLOC = -2,
-	DBL_DOUBLE_FREE  = -3,
-	DBL_NOT_FOUND    = -4,
-	DBL_OUT_OF_RANGE = -5
-};
 
 
 /**
@@ -42,7 +34,7 @@ enum dbl_ll_errors{
  *
  * @return
  */
-uint8_t destroy_dbl_ll(struct dbl_ll_node *ptr)
+dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node *ptr)
 {
 	if (!ptr)
 	{
@@ -71,7 +63,7 @@ uint8_t destroy_dbl_ll(struct dbl_ll_node *ptr)
  *
  * @return
  */
-uint8_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_t idx )
+dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_t idx )
 {
 	if (!ptr)
 	{
@@ -120,7 +112,7 @@ uint8_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_t idx )
  *
  * @return
  */
-uint8_t remove_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t idx)
+dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t idx)
 {
 	if (!ptr)
 	{

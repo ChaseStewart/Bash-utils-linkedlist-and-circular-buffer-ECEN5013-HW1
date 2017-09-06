@@ -24,15 +24,6 @@
 #include <stdbool.h>
 #include "../inc/circ_buff.h"
 
-enum circ_buff_errors{
-	C_SUCCESS        =  0,
-	C_INVALID_BUFFER = -1,
-	C_CANNOT_ALLOC   = -2,
-	C_DOUBLE_FREE    = -3,
-	C_BUFFER_FULL    = -4,
-	C_BUFFER_EMPTY   = -5
-};
-
 /**
  * @brief
  *
@@ -42,7 +33,7 @@ enum circ_buff_errors{
  *
  * @return
  */
-uint8_t allocate_c_buff(struct c_node *ptr, uint32_t size){
+circ_buff_status_t allocate_c_buff(struct c_node *ptr, uint32_t size){
 
 	/* allocate struct pointer, else error */
 	ptr = (struct c_node *)malloc(sizeof(struct c_node));
@@ -62,11 +53,11 @@ uint8_t allocate_c_buff(struct c_node *ptr, uint32_t size){
 	}
 
 	/* set struct members to default values */
-	ptr->base_p = buffer;
-	ptr->head = buffer;
-	ptr->tail = (uint32_t *) &buffer[size];
-	ptr->size = size;
-	ptr->len  = 0;
+	ptr->base_p    = buffer;
+	ptr->head      = buffer;
+	ptr->tail      = buffer;
+	ptr->size      = size;
+	ptr->num_items = 0;
 	
 	printf("Buffer of size %d allocated\n", size);
 	return C_SUCCESS;
@@ -81,7 +72,7 @@ uint8_t allocate_c_buff(struct c_node *ptr, uint32_t size){
  *
  * @return
  */
-uint8_t destroy_c_buff(struct c_node *ptr)
+circ_buff_status_t destroy_c_buff(struct c_node *ptr)
 {
 	if (!ptr)
 	{
@@ -117,14 +108,14 @@ bool is_c_buff_full(struct c_node *ptr)
 	}
 	else
 	{
-		if ( ptr->len == ptr->size)
+		if ( ptr->num_items == ptr->size)
 		{
 			printf("Buffer is full\n");
 			return true;
 		}
 		else
 		{
-			printf("Buffer len is %d\n", ptr->len);
+			printf("Buffer num_items is %d\n", ptr->num_items);
 			return false;
 		}
 	}
@@ -149,14 +140,14 @@ bool is_c_buff_empty(struct c_node *ptr)
 	}
 	else
 	{
-		if ( ptr->len == 0)
+		if ( ptr->num_items == 0)
 		{
 			printf("Buffer is empty\n");
 			return true;
 		}
 		else
 		{
-			printf("Buffer len is %d\n", ptr->len);
+			printf("Buffer num_items is %d\n", ptr->num_items);
 			return false;
 		}
 	}
@@ -171,20 +162,20 @@ bool is_c_buff_empty(struct c_node *ptr)
  *
  * @return
  */
-uint8_t add_c_buff_data(struct c_node *ptr, uint32_t data)
+circ_buff_status_t add_c_buff_data(struct c_node *ptr, uint32_t data)
 {
 	if (!ptr)
 	{
 		return C_INVALID_BUFFER;
 	}
-	else if (ptr->size == ptr->len)
+	else if (ptr->size == ptr->num_items)
 	{
 		return C_BUFFER_FULL;
 	}
 
 	*ptr->head = data;
 	ptr->head += sizeof(uint32_t);
-	ptr->len ++;
+	ptr->num_items ++;
 
 	return C_SUCCESS;
 }
@@ -198,13 +189,13 @@ uint8_t add_c_buff_data(struct c_node *ptr, uint32_t data)
  *
  * @return
  */
-uint8_t remove_c_buff_node(struct c_node *ptr)
+circ_buff_status_t remove_c_buff_node(struct c_node *ptr)
 {
 	if (!ptr)
 	{
 		return C_INVALID_BUFFER;
 	}
-	else if (ptr->len == 0)
+	else if (ptr->num_items == 0)
 	{
 		return C_BUFFER_EMPTY;
 	}
@@ -228,18 +219,18 @@ void dump_c_buff(struct c_node *ptr)
 		printf("ERROR: Invalid Buffer\n");
 		return;
 	}
-	else if (ptr->len == 0)
+	else if (ptr->num_items == 0)
 	{
 		printf("[]");
 		return;
 	}
 	
-	uint32_t alloc_size = 100 + ( ptr->len*10);
+	uint32_t alloc_size = 100 + ( ptr->num_items*10);
 	char print_str[alloc_size];
 
 	sprintf(print_str, "[ %d", ptr->base_p[0]);
 	
-	for (uint32_t idx=1; idx<ptr->len; idx++)
+	for (uint32_t idx=1; idx<ptr->num_items; idx++)
 	{
 		char snippet[100];
 		sprintf(snippet, ", %d", ptr->base_p[idx]);

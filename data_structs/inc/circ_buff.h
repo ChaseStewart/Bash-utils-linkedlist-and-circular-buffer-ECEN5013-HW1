@@ -23,12 +23,21 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+typedef enum {
+	C_SUCCESS        =  0,
+	C_INVALID_BUFFER = -1,
+	C_CANNOT_ALLOC   = -2,
+	C_DOUBLE_FREE    = -3,
+	C_BUFFER_FULL    = -4,
+	C_BUFFER_EMPTY   = -5
+} circ_buff_status_t;
+
 struct c_node {
 	uint32_t *head;
 	uint32_t *tail;
 	uint32_t *base_p;
 	uint32_t size;
-	uint32_t len;
+	uint32_t num_items;
 }; 
 
 
@@ -41,7 +50,7 @@ struct c_node {
  *
  * @return
  */
-uint8_t allocate_c_buff(struct c_node *ptr, uint32_t size);
+circ_buff_status_t allocate_c_buff(struct c_node *ptr, uint32_t size);
 
 /**
  * @brief
@@ -52,7 +61,7 @@ uint8_t allocate_c_buff(struct c_node *ptr, uint32_t size);
  *
  * @return
  */
-uint8_t destroy_c_buff(struct c_node *ptr);
+circ_buff_status_t destroy_c_buff(struct c_node *ptr);
 
 /**
  * @brief
@@ -88,7 +97,7 @@ bool is_c_buff_empty(struct c_node *ptr);
  *
  * @return
  */
-uint8_t add_c_buff_node(struct c_node *ptr);
+circ_buff_status_t  add_c_buff_node(struct c_node *ptr);
 
 /**
  * @brief
@@ -99,7 +108,7 @@ uint8_t add_c_buff_node(struct c_node *ptr);
  *
  * @return
  */
-uint8_t remove_c_buff_node(struct c_node *ptr);
+circ_buff_status_t remove_c_buff_node(struct c_node *ptr);
 
 /**
  * @brief print current status of circular buffer to stdout
