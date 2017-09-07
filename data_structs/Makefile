@@ -1,7 +1,7 @@
 
 CC=gcc
 
-CFLAGS= -g 
+CFLAGS= -g -std=c99
 
 IPATH = -I./inc
 
@@ -12,7 +12,7 @@ FILES += src/circ_buff.c
 FILES += src/double_linklist.c  
 
 all:
-	$(CC) $(IPATH) $(FILES) $(LIBS) -o test
+	$(CC) $(CFLAGS) $(IPATH) $(FILES) $(LIBS) -o test
 	@echo Test Build Complete!
 
 .PHONY: clean

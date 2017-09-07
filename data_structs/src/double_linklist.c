@@ -5,7 +5,7 @@
  *
  *
  *
-******************************************************/
+ *****************************************************/
 /**
  * @file double_linklist.c
  * @brief A simple library for a doubly-linked list
@@ -23,8 +23,6 @@
 #include <stdbool.h>
 #include "../inc/double_linklist.h"
 
-
-
 /**
  * @brief
  *
@@ -34,23 +32,18 @@
  *
  * @return
  */
-dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node *ptr)
+dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node **ptr)
 {
-	if (!ptr)
+	if (!(*ptr))
 	{
 		return DBL_DOUBLE_FREE;
 	}
-	while(ptr->next != NULL)
+	while((*ptr)->next != NULL)
 	{
-		if (ptr->next == NULL && ptr->prev == NULL)
-		{
-			free(ptr);
-			return DBL_SUCCESS;
-		}
-		ptr = ptr->next;
-		free(ptr->prev);
+		(*ptr) = (*ptr)->next;
+		free((*ptr)->prev);
 	}
-	free(ptr);
+	free(*ptr);
 	return DBL_SUCCESS;
 }
 
@@ -63,9 +56,9 @@ dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node *ptr)
  *
  * @return
  */
-dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_t idx )
+dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32_t idx )
 {
-	if (!ptr)
+	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
@@ -78,27 +71,27 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_
 
 	for (int i=0; i<idx; i++)
 	{
-		if(ptr == NULL)
+		if((*ptr) == NULL)
 		{
 			return DBL_OUT_OF_RANGE;
 		}
-		ptr = ptr->next;
+		(*ptr) = (*ptr)->next;
 	}
-	if (ptr == NULL)
+	if ((*ptr) == NULL)
 	{
-		ptr = new_node;
+		(*ptr) = new_node;
 	}
-	else if (ptr->next == NULL)
+	else if ((*ptr)->next == NULL)
 	{	
-		ptr->next = new_node;
-		new_node->prev = ptr;
+		(*ptr)->next = new_node;
+		new_node->prev = (*ptr);
 	}
 	else
 	{
-		ptr->next->prev = new_node;
-		new_node->next = ptr->next;
-		ptr->next = new_node;
-		new_node->prev = ptr;
+		(*ptr)->next->prev = new_node;
+		new_node->next = (*ptr)->next;
+		(*ptr)->next = new_node;
+		new_node->prev = (*ptr);
 	}
 	return DBL_SUCCESS;
 }
@@ -112,37 +105,37 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t value, uint32_
  *
  * @return
  */
-dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t idx)
+dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t idx)
 {
-	if (!ptr)
+	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
 	for (int i=0; i<=idx; i++)
 	{
-		if(ptr == NULL)
+		if((*ptr) == NULL)
 		{
 			return DBL_OUT_OF_RANGE;
 		}
-		ptr = ptr->next;
+		(*ptr) = (*ptr)->next;
 	}
-	if (ptr->next == NULL)
+	if ((*ptr)->next == NULL)
 	{
-		if (ptr->prev == NULL)
+		if ((*ptr)->prev == NULL)
 		{
-			free(ptr);
+			free(*ptr);
 		}
 		else
 		{
-			ptr->prev->next = NULL;
-			free(ptr);
+			(*ptr)->prev->next = NULL;
+			free(*ptr);
 		}
 	}
 	else
 	{
-		ptr->prev->next = ptr->next;
-		ptr->next->prev = ptr->prev;
-		free(ptr);
+		(*ptr)->prev->next = (*ptr)->next;
+		(*ptr)->next->prev = (*ptr)->prev;
+		free(*ptr);
 	}
 }
 
@@ -155,20 +148,20 @@ dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node *ptr, uint32_t idx)
  *
  * @return
  */
-uint32_t search_dbl_ll(struct dbl_ll_node *ptr, uint32_t value)
+uint32_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t value)
 {
-	if (!ptr)
+	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
 	uint32_t counter = 0;
-	while (ptr != NULL)
+	while ((*ptr) != NULL)
 	{
-		if (ptr->data == value)
+		if ((*ptr)->data == value)
 		{
 			return counter;
 		}
-		ptr = ptr->next;
+		(*ptr) = (*ptr)->next;
 		counter ++;
 	}
 	return DBL_NOT_FOUND;
@@ -183,16 +176,16 @@ uint32_t search_dbl_ll(struct dbl_ll_node *ptr, uint32_t value)
  *
  * @return
  */
-uint32_t dbl_ll_size(struct dbl_ll_node *ptr)
+uint32_t dbl_ll_size(struct dbl_ll_node **ptr)
 {
-	if (!ptr)
+	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
 	uint32_t counter = 0;
-	while (ptr != NULL)
+	while ((*ptr) != NULL)
 	{
-		ptr = ptr->next;
+		(*ptr) = (*ptr)->next;
 		counter++;
 	}
 	return counter;
