@@ -6,7 +6,7 @@
  *
  *
  *****************************************************/
-/**
+/*
  * @file double_linklist.c
  * @brief A simple library for a doubly-linked list
  * 
@@ -23,74 +23,100 @@
 #include <stdbool.h>
 #include "../inc/double_linklist.h"
 
-/**
- * @brief
+/*
+ * @brief destroy the provided linked list completely and free all nodes
  *
  *
- * @param
- * @param
+ * @param struct dbl_ll_node **ptr: pointer to a pointer to the head dbl_ll node
  *
- * @return
+ * @return dbl_ll_status_t: an enum of the function exit status
  */
 dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node **ptr)
 {
+	/* check whether buffer is valid, else refuse DOUBLE_FREE */
 	if (!(*ptr))
 	{
 		return DBL_DOUBLE_FREE;
 	}
+
+	/* go thru list freeing node behind current in dbl_ll until next==NULL */
 	while((*ptr)->next != NULL)
 	{
 		(*ptr) = (*ptr)->next;
 		free((*ptr)->prev);
 	}
+	
+	/* when 1 node left (next==NULL) just free that node */
 	free(*ptr);
 	return DBL_SUCCESS;
 }
 
-/**
- * @brief
+/*
+ * @brief add dbl_ll node at index idx with data=value
  *
  *
- * @param
- * @param
+ * @param struct dbl_ll_node **ptr: pointer to a pointer to the head dbl_ll node
+ * @param uint32_t value: the uint32 we want the double link_list to hold
+ * @param uint32_t idx: the index at which we want to insert the new node
  *
- * @return
+ * @return dbl_ll_status_t: an enum of the function exit status
  */
 dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32_t idx )
 {
+	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
 	
+	/* create+malloc a default new dbl_ll node */
 	struct dbl_ll_node *new_node;
 	new_node = (struct dbl_ll_node *)malloc(sizeof(struct dbl_ll_node));
+
+	/* see if malloc worked, else ret failure code */
+	if (!new_node)
+	{
+		return DBL_CANNOT_ALLOC;
+	}
+	
+	/* set prev+next to NULL, set data to provided val */
 	new_node->data = value;
 	new_node->next = NULL;
 	new_node->prev = NULL;
 
+	/*create temp dbl_ll_node ptr to iterate thru dbl_ll */
 	struct dbl_ll_node *temp = NULL;
 	temp = (*ptr);
 
+
+	/* iterate thru dbl_ll until the given idx is reached or end of list */
 	for (int i=0; i<idx; i++)
 	{
+		/* if the current node is null, requested idx is out of range  */
 		if(temp == NULL)
 		{
 			return DBL_OUT_OF_RANGE;
 		}
 		temp = temp->next;
 	}
-	if (temp == NULL)
+	
+	/* if idx 0 was provided, set first node to this new node */
+	if (idx == 0)
 	{
-		temp = new_node;
+		new_node->next = temp;
+		(*ptr) = new_node;
 	}
+
+	/* once requested idx is reached, next==NULL means adding to end of list */
 	else if (temp->next == NULL)
 	{	
 		temp->next = new_node;
 		new_node->prev = temp;
 	}
+	/* elif next exists, add node into the list and push curr node at idx to next int */
 	else
 	{
+		/* it helps to do this with your fingers to keep the logic straight */
 		temp->next->prev = new_node;
 		new_node->next = temp->next;
 		temp->next = new_node;
@@ -99,76 +125,94 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
 	return DBL_SUCCESS;
 }
 
-/**
- * @brief
+/*
+ * @brief remove dbl_ll node at index idx, return its value in retval
  *
  *
- * @param
- * @param
+ * @param struct dbl_ll_node **ptr: pointer to a pointer to the head dbl_ll node
+ * @param uint32_t *retval: a pointer to the value of the removed node- we return it
+ * @param uint32_t idx: the index of the list we wish to return
  *
- * @return
+ * @return dbl_ll_status_t: an enum of the function exit status
  */
 dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, uint32_t idx)
 {
+	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
 
+	/*create temp dbl_ll_node ptr to iterate thru dbl_ll */
 	struct dbl_ll_node *temp = NULL;
 	temp = (*ptr);
+
+	/* iterate thru dbl_ll until the given idx is reached or end of list */
 	for (int i=0; i<=idx; i++)
 	{
+		/* if the current node is null, requested idx is out of range  */
 		if(temp == NULL)
 		{
 			return DBL_OUT_OF_RANGE;
 		}
 		temp = temp->next;
 	}
-	if (temp->next == NULL)
+	/* if idx 0 was provided, set ptr to point to 2nd node and free 1st */
+	if (idx == 0)
 	{
-		if (temp->prev == NULL)
-		{
-			*retval = temp->data;
-			free(temp);
-		}
-		else
-		{
-			temp->prev->next = NULL;
-			*retval = temp->data;
-			free(temp);
-		}
+		*retval = temp->data;
+		(*ptr) = (*ptr)->next;
+		free(temp);
 	}
+	/* elif once requested idx is reached, next==NULL means adding to end of list */
+	else if (temp->next == NULL)
+	{
+		temp->prev->next = NULL;
+		*retval = temp->data;
+		free(temp);
+	}
+	/* else node is in the middle, take it out of list, then free the node */
 	else
 	{
+		/* once again, use fingers to make sense of this */
+		/* next's prev is current's prev and likewise prev's next is curr next  */
 		temp->prev->next = temp->next;
 		temp->next->prev = temp->prev;
 		*retval = temp->data;
 		free(temp);
 	}
+	return DBL_SUCCESS;
 }
 
-/**
- * @brief
+/*
+ * @brief search through dbl_ll for given value, place it into retval if found else error
  *
  *
- * @param
- * @param
+ * @param struct dbl_ll_node **ptr: pointer to a pointer to the head dbl_ll node
+ * @param uint32_t *retval: pointer to the index of the returned value in the l_list
+ * @param uint32_t value: the value for which we want to search
  *
- * @return
+ * @return dbl_ll_status_t: an enum of the function exit status
  */
 dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32_t value)
 {
+	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
+
+	/* set deref of retval to 0 */
 	*retval = 0;
+	
+	/*create temp dbl_ll_node ptr to iterate thru dbl_ll */
 	struct dbl_ll_node *temp = NULL;
 	temp = *ptr;
 
+	/* until end of list, iter thru list and keep incrementing retval */
 	while (temp != NULL)
 	{
+		/* my algo: return idx of first data val that matches */
 		if (temp->data == value)
 		{
 			return DBL_SUCCESS;
@@ -176,29 +220,33 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
 		temp = temp->next;
 		*retval++;
 	}
+
+	/* if temp==NULL is reached, the val wasn't in the list */
 	return DBL_NOT_FOUND;
 }
 
-/**
- * @brief
+/*
+ * @brief return the number of connected, allocated nodes in this dbl_ll
  *
  *
- * @param
- * @param
+ * @param struct dbl_ll_node **ptr: pointer to a pointer to the head dbl_ll node
  *
- * @return
+ * @return dbl_ll_status_t: an enum of the function exit status
  */
 uint32_t dbl_ll_size(struct dbl_ll_node **ptr)
 {
+	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
 
+	/* create counter var and temp ptr to iterate thru dbl_ll */
 	uint32_t counter = 0;
 	struct dbl_ll_node *temp = NULL;
 	temp = *ptr;
 
+	/* until a null node is found, continue down dbl_ll and inc counter */
 	while (temp != NULL)
 	{
 		temp = temp->next;
