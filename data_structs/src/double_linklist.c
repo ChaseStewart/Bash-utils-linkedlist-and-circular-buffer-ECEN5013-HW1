@@ -157,13 +157,13 @@ dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, u
  *
  * @return
  */
-uint32_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t value)
+dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32_t value)
 {
 	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
-	uint32_t counter = 0;
+	*retval = 0;
 	struct dbl_ll_node *temp = NULL;
 	temp = *ptr;
 
@@ -171,10 +171,10 @@ uint32_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t value)
 	{
 		if (temp->data == value)
 		{
-			return counter;
+			return DBL_SUCCESS;
 		}
 		temp = temp->next;
-		counter ++;
+		*retval++;
 	}
 	return DBL_NOT_FOUND;
 }
