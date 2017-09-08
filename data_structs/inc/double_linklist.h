@@ -68,7 +68,7 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
  *
  * @return
  */
-dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t idx);
+dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, uint32_t idx);
 
 /**
  * @brief

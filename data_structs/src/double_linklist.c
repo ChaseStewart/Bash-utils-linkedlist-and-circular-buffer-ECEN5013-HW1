@@ -69,29 +69,32 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
 	new_node->next = NULL;
 	new_node->prev = NULL;
 
+	struct dbl_ll_node *temp = NULL;
+	temp = (*ptr);
+
 	for (int i=0; i<idx; i++)
 	{
-		if((*ptr) == NULL)
+		if(temp == NULL)
 		{
 			return DBL_OUT_OF_RANGE;
 		}
-		(*ptr) = (*ptr)->next;
+		temp = temp->next;
 	}
-	if ((*ptr) == NULL)
+	if (temp == NULL)
 	{
-		(*ptr) = new_node;
+		temp = new_node;
 	}
-	else if ((*ptr)->next == NULL)
+	else if (temp->next == NULL)
 	{	
-		(*ptr)->next = new_node;
-		new_node->prev = (*ptr);
+		temp->next = new_node;
+		new_node->prev = temp;
 	}
 	else
 	{
-		(*ptr)->next->prev = new_node;
-		new_node->next = (*ptr)->next;
-		(*ptr)->next = new_node;
-		new_node->prev = (*ptr);
+		temp->next->prev = new_node;
+		new_node->next = temp->next;
+		temp->next = new_node;
+		new_node->prev = temp;
 	}
 	return DBL_SUCCESS;
 }
@@ -105,37 +108,43 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
  *
  * @return
  */
-dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t idx)
+dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, uint32_t idx)
 {
 	if (!(*ptr))
 	{
 		return DBL_INVALID_LL;
 	}
+
+	struct dbl_ll_node *temp = NULL;
+	temp = (*ptr);
 	for (int i=0; i<=idx; i++)
 	{
-		if((*ptr) == NULL)
+		if(temp == NULL)
 		{
 			return DBL_OUT_OF_RANGE;
 		}
-		(*ptr) = (*ptr)->next;
+		temp = temp->next;
 	}
-	if ((*ptr)->next == NULL)
+	if (temp->next == NULL)
 	{
-		if ((*ptr)->prev == NULL)
+		if (temp->prev == NULL)
 		{
-			free(*ptr);
+			*retval = temp->data;
+			free(temp);
 		}
 		else
 		{
-			(*ptr)->prev->next = NULL;
-			free(*ptr);
+			temp->prev->next = NULL;
+			*retval = temp->data;
+			free(temp);
 		}
 	}
 	else
 	{
-		(*ptr)->prev->next = (*ptr)->next;
-		(*ptr)->next->prev = (*ptr)->prev;
-		free(*ptr);
+		temp->prev->next = temp->next;
+		temp->next->prev = temp->prev;
+		*retval = temp->data;
+		free(temp);
 	}
 }
 
@@ -155,13 +164,16 @@ uint32_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t value)
 		return DBL_INVALID_LL;
 	}
 	uint32_t counter = 0;
-	while ((*ptr) != NULL)
+	struct dbl_ll_node *temp = NULL;
+	temp = *ptr;
+
+	while (temp != NULL)
 	{
-		if ((*ptr)->data == value)
+		if (temp->data == value)
 		{
 			return counter;
 		}
-		(*ptr) = (*ptr)->next;
+		temp = temp->next;
 		counter ++;
 	}
 	return DBL_NOT_FOUND;
@@ -182,10 +194,14 @@ uint32_t dbl_ll_size(struct dbl_ll_node **ptr)
 	{
 		return DBL_INVALID_LL;
 	}
+
 	uint32_t counter = 0;
-	while ((*ptr) != NULL)
+	struct dbl_ll_node *temp = NULL;
+	temp = *ptr;
+
+	while (temp != NULL)
 	{
-		(*ptr) = (*ptr)->next;
+		temp = temp->next;
 		counter++;
 	}
 	return counter;

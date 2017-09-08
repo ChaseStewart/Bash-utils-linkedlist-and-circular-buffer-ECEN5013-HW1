@@ -23,6 +23,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+/* enumerate status */
 typedef enum {
 	C_SUCCESS        =  0,
 	C_INVALID_BUFFER = -1,
@@ -32,6 +33,7 @@ typedef enum {
 	C_BUFFER_EMPTY   = -5
 } circ_buff_status_t;
 
+/* struct for the circular buffe, hold buffer, a couple pointers, and uints */
 struct c_node {
 	uint32_t *head;
 	uint32_t *tail;
@@ -42,71 +44,64 @@ struct c_node {
 
 
 /**
- * @brief
+ * @brief create a circular buffer
  *
  *
- * @param
- * @param
+ * @param ptr- pointer to a pointer to a c_node struct
+ * @param size- size of the circular buffer
  *
- * @return
+ * @return circ_buff_status - enum of status
  */
 circ_buff_status_t allocate_c_buff(struct c_node **ptr, uint32_t size);
 
 /**
- * @brief
+ * @brief destroy an already-allocated circ-buffer
  *
  *
- * @param
- * @param
+ * @param ptr- pointer to a pointer to a c_node struct
  *
- * @return
+ * @return circ_buff_status - enum of status
  */
 circ_buff_status_t destroy_c_buff(struct c_node **ptr);
 
 /**
- * @brief
+ * @brief return boolean of whether buffer is full or not
  *
  *
- * @param
- * @param
+ * @param ptr- pointer to a pointer to a c_node struct
  *
- * @return
+ * @return bool true if buffer is full else false
  */
 bool is_c_buff_full(struct c_node **ptr);
 
-
 /**
- * @brief
+ * @brief return boolean of whether buffer is empty or not
  *
  *
- * @param
- * @param
+ * @param ptr- pointer to a pointer to a c_node struct
  *
- * @return
+ * @return bool true if buffer is empty else false
  */
 bool is_c_buff_empty(struct c_node **ptr);
 
-
-
 /**
- * @brief
+ * @brief add a value into the circular buffer if it's not full
  *
  *
- * @param
- * @param
+ * @param ptr- pointer to a pointer to a c_node struct
+ * @param data- the uint32 value we want to put into the circ buffer
  *
- * @return
+ * @return circ_buff_status - enum of status
  */
 circ_buff_status_t  add_c_buff_data(struct c_node **ptr, uint32_t data);
 
 /**
- * @brief
+ * @brief remove a value from the circular buffer if it's not empty
  *
  *
- * @param
- * @param
+ * @param ptr- pointer to a pointer to a c_node struct
  *
- * @return
+ * @return circ_buff_status - enum of status
  */
 circ_buff_status_t remove_c_buff_data(struct c_node **ptr);
 
@@ -114,9 +109,9 @@ circ_buff_status_t remove_c_buff_data(struct c_node **ptr);
  * @brief print current status of circular buffer to stdout
  *
  *
- * @param *buff - pointer to buffer
+ * @param ptr- pointer to a pointer to a c_node struct
  *
- * @return
+ * @return none
  */
 void dump_c_buff(struct c_node **ptr);
 

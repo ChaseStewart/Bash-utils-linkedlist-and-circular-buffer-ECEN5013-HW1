@@ -118,7 +118,6 @@ bool is_c_buff_full(struct c_node **ptr)
 	}
 }
 
-
 /**
  * @brief
  *
@@ -170,7 +169,7 @@ circ_buff_status_t add_c_buff_data(struct c_node **ptr, uint32_t data)
 
 	*((*ptr)->head) = data;
 	(*ptr)->head++;
-	if ((*ptr)->head == ((*ptr)->base_p + (sizeof(uint32_t)* (*ptr)->size )))
+	if ((*ptr)->head == ((*ptr)->base_p + (sizeof(uint32_t) * (*ptr)->size )))
 	{
 		(*ptr)->head = (*ptr)->base_p;
 	}
@@ -229,7 +228,7 @@ void dump_c_buff(struct c_node **ptr)
 		return;
 	}
 	
-	printf("*** Circ Buffer ***\n");
+	printf("\n*** Dump Circ Buffer ***\n");
 	printf("note: '^'=head '*'=tail\n");
 	printf("\n[ ");
 	uint32_t *temp_ptr = NULL;
@@ -252,7 +251,7 @@ void dump_c_buff(struct c_node **ptr)
 			temp_ptr = (*ptr)->base_p;
 		}
 	}
-	if (temp_ptr  == (*ptr)->head)
+	if (temp_ptr+1  == (*ptr)->head)
 	{
 		printf("^");
 	}
