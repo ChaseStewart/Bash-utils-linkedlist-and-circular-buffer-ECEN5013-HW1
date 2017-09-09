@@ -213,6 +213,7 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
 	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
+		*retval = 0;
 		return DBL_INVALID_LL;
 	}
 
@@ -237,6 +238,7 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
 	}
 
 	/* if temp==NULL is reached, the val wasn't in the list */
+	*retval = 0;
 	return DBL_NOT_FOUND;
 }
 

@@ -46,9 +46,34 @@ int main()
 	
 	dump_c_buff(&ptr);
 
+	retval = remove_c_buff_data(&ptr);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+
+	retval = remove_c_buff_data(&ptr);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	
+	retval = remove_c_buff_data(&ptr);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+
+	dump_c_buff(&ptr);
+
+	retval = remove_c_buff_data(&ptr);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	
+	dump_c_buff(&ptr);
+
+
+	retval = remove_c_buff_data(&ptr);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+
+	retval = remove_c_buff_data(&ptr);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	
+	
 	retval = destroy_c_buff(&ptr); 
 	printf("Retval is %d\n", retval);
 	
+
 	if (!ptr)
 	{
 		printf(" C Buff delete was successful\n\n");
@@ -56,6 +81,8 @@ int main()
 	
 	retval = add_c_buff_data(&ptr, 700);
 	printf("Retval is: %d should be: %d \n", retval, -1);
+
+
 
 	printf("\n\n*** DOUBLE_LINK_LIST ***\n");
 	struct dbl_ll_node *d_ptr = NULL;
@@ -98,8 +125,8 @@ int main()
 	retval = remove_dbl_ll_node(&d_ptr, &data_val, 2);
 	printf("[8080, 12345, 345, 2345, 505 ] Data val is: %d should be: %d \n", data_val, 345);
 	
-	retval = search_dbl_ll(&d_ptr, &data_val, 505);
-	printf("Search idx is: %d should be: %d \n", data_val, 3);
+	retval = search_dbl_ll(&d_ptr, &data_val, 5051);
+	printf("Search idx is: %d should be: %d \n", retval, -4);
 	
 	retval = search_dbl_ll(&d_ptr, &data_val, 2345);
 	printf("Search idx is: %d should be: %d \n", data_val, 2);
@@ -112,6 +139,19 @@ int main()
 	
 	retval = remove_dbl_ll_node(&d_ptr, &data_val, 8);
 	printf("Retval is: %d should be: %d \n", retval, -5);
+	
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 0);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 0);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 0);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 0);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 0);
+	printf("Retval is: %d should be: %d \n", retval, 0);
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 0);
+	printf("Retval is: %d should be: %d \n", retval, 0);
 
 	retval = destroy_dbl_ll(&d_ptr);
 	printf("Retval is: %d should be: %d \n", retval, 0);
