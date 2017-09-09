@@ -14,7 +14,7 @@ int main()
 	retval = allocate_c_buff(&ptr, -1);
 	printf("Retval is: %d should be: %d \n\n", retval, -2);
 
-	retval = allocate_c_buff(&ptr, 5);
+	retval = allocate_c_buff(&ptr, 4);
 	printf("Retval is: %d should be: %d \n", retval, 0);
 
 	retval = add_c_buff_data(&ptr, 100);
@@ -53,6 +53,9 @@ int main()
 	{
 		printf(" C Buff delete was successful\n\n");
 	}
+	
+	retval = add_c_buff_data(&ptr, 700);
+	printf("Retval is: %d should be: %d \n", retval, -1);
 
 	printf("\n\n*** DOUBLE_LINK_LIST ***\n");
 	struct dbl_ll_node *d_ptr = NULL;
@@ -81,7 +84,7 @@ int main()
 	printf("Size is %d\n", data_val);
 
 	retval = add_dbl_ll_node(&d_ptr, 505, 3);
-	printf("[12345,345, 2345, 505] Retval is: %d should be: %d \n", retval, 0);
+	printf("[12345, 345, 2345, 505] Retval is: %d should be: %d \n", retval, 0);
 
 	retval = add_dbl_ll_node(&d_ptr, 8080, 0);
 	printf("[8080, 12345, 345, 2345, 505 ] Retval is: %d should be: %d \n", retval, 0);
@@ -93,13 +96,13 @@ int main()
 	printf("[8080, 12345, 345, 2345, 505 ] Retval is: %d should be: %d \n", retval, -5);
 
 	retval = remove_dbl_ll_node(&d_ptr, &data_val, 2);
-	printf("Data val is: %d should be: %d \n", data_val, 345);
+	printf("[8080, 12345, 345, 2345, 505 ] Data val is: %d should be: %d \n", data_val, 345);
 	
 	retval = search_dbl_ll(&d_ptr, &data_val, 505);
-	printf("Search idx is: %d should be: %d \n", data_val, 2);
+	printf("Search idx is: %d should be: %d \n", data_val, 3);
 	
 	retval = search_dbl_ll(&d_ptr, &data_val, 2345);
-	printf("Search idx is: %d should be: %d \n", retval, -4);
+	printf("Search idx is: %d should be: %d \n", data_val, 2);
 	
 	retval = search_dbl_ll(&d_ptr, &data_val, 8080);
 	printf("Search idx is: %d should be: %d \n", data_val, 0);
