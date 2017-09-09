@@ -14,8 +14,8 @@
  * The file also contains methods to create, destroy, add, remove, dump, and count the struct.
  *
  * @author Chase E Stewart
- * @date Sept 4 2017
- * @version 1.0
+ * @date Sept 8 2017
+ * @version 1.1
  *
  */
 #include <stdint.h>
