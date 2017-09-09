@@ -10,8 +10,9 @@
  * @file double_linklist.c
  * @brief A simple library for a doubly-linked list
  * 
- * This circular buffer holds a buffer and helpful counts/pointers in a struct
- * The file also contains methods to create, destroy, add, remove, dump, and count the struct.
+ * This linked list is a struct of structs that creates a doubly-linked list. There is no master struct here;
+ * all operations are completed by iterating through the list.
+ * The file also contains methods to add, remove, search, destroy, and count the linked list, one node at a time.
  *
  * @author Chase E Stewart
  * @date Sept 8 2017
