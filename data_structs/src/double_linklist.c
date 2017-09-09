@@ -63,12 +63,6 @@ dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node **ptr)
  */
 dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32_t idx )
 {
-	/* check whether buffer is valid */
-	if (!(*ptr))
-	{
-		return DBL_INVALID_LL;
-	}
-	
 	/* create+malloc a default new dbl_ll node */
 	struct dbl_ll_node *new_node;
 	new_node = (struct dbl_ll_node *)malloc(sizeof(struct dbl_ll_node));
@@ -84,45 +78,58 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
 	new_node->next = NULL;
 	new_node->prev = NULL;
 
+	/* check whether buffer is valid, for this function only initialize if so */
+	if (!(*ptr))
+	{
+		(*ptr) = new_node;
+		return DBL_SUCCESS;
+	}
+	
+
 	/*create temp dbl_ll_node ptr to iterate thru dbl_ll */
 	struct dbl_ll_node *temp = NULL;
 	temp = (*ptr);
 
-
-	/* iterate thru dbl_ll until the given idx is reached or end of list */
-	for (int i=0; i<idx; i++)
-	{
-		/* if the current node is null, requested idx is out of range  */
-		if(temp == NULL)
-		{
-			return DBL_OUT_OF_RANGE;
-		}
-		temp = temp->next;
-	}
-	
 	/* if idx 0 was provided, set first node to this new node */
 	if (idx == 0)
 	{
 		new_node->next = temp;
 		(*ptr) = new_node;
+		return DBL_SUCCESS;
 	}
-
-	/* once requested idx is reached, next==NULL means adding to end of list */
-	else if (temp->next == NULL)
-	{	
-		temp->next = new_node;
-		new_node->prev = temp;
-	}
-	/* elif next exists, add node into the list and push curr node at idx to next int */
 	else
 	{
-		/* it helps to do this with your fingers to keep the logic straight */
-		temp->next->prev = new_node;
-		new_node->next = temp->next;
-		temp->next = new_node;
-		new_node->prev = temp;
+		/* iterate thru dbl_ll until the given idx is reached or end of list */
+		for (int i=0; i<(idx-1); i++)
+		{
+			/* if the current node is null, requested idx is out of range  */
+			if(temp->next == NULL)
+			{
+				return DBL_OUT_OF_RANGE;
+			}
+			temp = temp->next;
+		}
+		
+
+		/* once requested idx is reached, next==NULL means adding to end of list */
+		if (temp->next == NULL)
+		{	
+			printf(" CASE 1 \n");
+			temp->next = new_node;
+			new_node->prev = temp;
+		}
+		/* elif next exists, add node into the list and push curr node at idx to next int */
+		else
+		{
+			/* it helps to do this with your fingers to keep the logic straight */
+			printf(" CASE 2 \n");
+			temp->next->prev = new_node;
+			new_node->next = temp->next;
+			temp->next = new_node;
+			new_node->prev = temp;
+		}
+		return DBL_SUCCESS;
 	}
-	return DBL_SUCCESS;
 }
 
 /*
@@ -140,6 +147,7 @@ dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, u
 	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
+		*retval = 0;
 		return DBL_INVALID_LL;
 	}
 
@@ -153,6 +161,7 @@ dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, u
 		/* if the current node is null, requested idx is out of range  */
 		if(temp == NULL)
 		{
+			*retval = 0;
 			return DBL_OUT_OF_RANGE;
 		}
 		temp = temp->next;
@@ -203,7 +212,7 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
 	}
 
 	/* set deref of retval to 0 */
-	*retval = 0;
+	uint32_t temp_counter = 0;
 	
 	/*create temp dbl_ll_node ptr to iterate thru dbl_ll */
 	struct dbl_ll_node *temp = NULL;
@@ -215,10 +224,11 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
 		/* my algo: return idx of first data val that matches */
 		if (temp->data == value)
 		{
+			*retval = temp_counter;
 			return DBL_SUCCESS;
 		}
 		temp = temp->next;
-		*retval++;
+		temp_counter++;
 	}
 
 	/* if temp==NULL is reached, the val wasn't in the list */
@@ -230,14 +240,17 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
  *
  *
  * @param struct dbl_ll_node **ptr: pointer to a pointer to the head dbl_ll node
+ * @param uint32_t *retval: pointer to the returned size of the linked list
  *
  * @return dbl_ll_status_t: an enum of the function exit status
  */
-uint32_t dbl_ll_size(struct dbl_ll_node **ptr)
+dbl_ll_status_t dbl_ll_size(struct dbl_ll_node **ptr, uint32_t *retval)
 {
 	/* check whether buffer is valid */
 	if (!(*ptr))
 	{
+		printf("Invalid Doubly-Linked List \n");
+		*retval = 0;
 		return DBL_INVALID_LL;
 	}
 
@@ -252,6 +265,7 @@ uint32_t dbl_ll_size(struct dbl_ll_node **ptr)
 		temp = temp->next;
 		counter++;
 	}
-	return counter;
+	(*retval) = counter;
+	return DBL_SUCCESS;
 }
 

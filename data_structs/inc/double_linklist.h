@@ -100,6 +100,6 @@ dbl_ll_status_t search_dbl_ll(struct dbl_ll_node **ptr, uint32_t *retval, uint32
  *
  * @return dbl_ll_status_t: an enum of the function exit status
  */
-uint32_t dbl_ll_size(struct dbl_ll_node **ptr);
+dbl_ll_status_t dbl_ll_size(struct dbl_ll_node **ptr, uint32_t *retval);
 
 #endif /* __MY_DBL_LINKLIST_H__ */
