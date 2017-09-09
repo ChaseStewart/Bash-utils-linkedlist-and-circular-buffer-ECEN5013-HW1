@@ -301,7 +301,7 @@ void dump_c_buff(struct c_node **ptr)
  *
  * @param struct c_node **ptr: pointer to a pointer to a c_node struct
  *
- * @return circ_buff_status - enum of status
+ * @return uint32_t size - size of circular buffer
  */
 uint32_t c_buff_size(struct c_node **ptr)
 {
