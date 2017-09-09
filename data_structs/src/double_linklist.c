@@ -117,7 +117,6 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
 		/* once requested idx is reached, next==NULL means adding to end of list */
 		if (temp->next == NULL)
 		{	
-			printf(" CASE 1 \n");
 			temp->next = new_node;
 			new_node->prev = temp;
 		}
@@ -125,7 +124,6 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
 		else
 		{
 			/* it helps to do this with your fingers to keep the logic straight */
-			printf(" CASE 2 \n");
 			temp->next->prev = new_node;
 			new_node->next = temp->next;
 			temp->next = new_node;
@@ -158,17 +156,6 @@ dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, u
 	struct dbl_ll_node *temp = NULL;
 	temp = (*ptr);
 
-	/* iterate thru dbl_ll until the given idx is reached or end of list */
-	for (int i=0; i<=idx; i++)
-	{
-		/* if the current node is null, requested idx is out of range  */
-		if(temp == NULL)
-		{
-			*retval = 0;
-			return DBL_OUT_OF_RANGE;
-		}
-		temp = temp->next;
-	}
 	/* if idx 0 was provided, set ptr to point to 2nd node and free 1st */
 	if (idx == 0)
 	{
@@ -176,22 +163,36 @@ dbl_ll_status_t remove_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t *retval, u
 		(*ptr) = (*ptr)->next;
 		free(temp);
 	}
-	/* elif once requested idx is reached, next==NULL means adding to end of list */
-	else if (temp->next == NULL)
-	{
-		temp->prev->next = NULL;
-		*retval = temp->data;
-		free(temp);
-	}
-	/* else node is in the middle, take it out of list, then free the node */
 	else
 	{
-		/* once again, use fingers to make sense of this */
-		/* next's prev is current's prev and likewise prev's next is curr next  */
-		temp->prev->next = temp->next;
-		temp->next->prev = temp->prev;
-		*retval = temp->data;
-		free(temp);
+		/* iterate thru dbl_ll until the given idx is reached or end of list */
+		for (int i=0; i<=(idx-1); i++)
+		{
+			/* if the current node is null, requested idx is out of range  */
+			if(temp->next == NULL)
+			{
+				*retval = 0;
+				return DBL_OUT_OF_RANGE;
+			}
+			temp = temp->next;
+		}
+		/* elif once requested idx is reached, next==NULL means adding to end of list */
+		if (temp->next == NULL)
+		{
+			temp->prev->next = NULL;
+			*retval = temp->data;
+			free(temp);
+		}
+		/* else node is in the middle, take it out of list, then free the node */
+		else
+		{
+			/* once again, use fingers to make sense of this */
+			/* next's prev is current's prev and likewise prev's next is curr next  */
+			temp->prev->next = temp->next;
+			temp->next->prev = temp->prev;
+			*retval = temp->data;
+			free(temp);
+		}
 	}
 	return DBL_SUCCESS;
 }
