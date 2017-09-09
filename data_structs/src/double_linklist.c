@@ -48,6 +48,7 @@ dbl_ll_status_t destroy_dbl_ll(struct dbl_ll_node **ptr)
 	
 	/* when 1 node left (next==NULL) just free that node */
 	free(*ptr);
+	(*ptr) = NULL;
 	return DBL_SUCCESS;
 }
 

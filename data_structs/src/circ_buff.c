@@ -87,6 +87,7 @@ circ_buff_status_t destroy_c_buff(struct c_node **ptr)
 	/* first free the buffer itself, then the struct */
 	free((*ptr)->base_p);
 	free(*ptr);
+	(*ptr) = NULL;
 	return C_SUCCESS;
 }
 

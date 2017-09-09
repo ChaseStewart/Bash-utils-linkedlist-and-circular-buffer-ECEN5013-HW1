@@ -38,74 +38,78 @@ int main()
 	retval = remove_c_buff_data(&ptr);
 	printf("Retval is: %d should be: %d \n", retval, 0);
 	
-	//retval = remove_c_buff_data(&ptr);
-	//printf("Retval is: %d should be: %d \n", retval, 0);
-	
 	retval = add_c_buff_data(&ptr, 600);
 	printf("Retval is: %d should be: %d \n", retval, 0);
 	
 	retval = add_c_buff_data(&ptr, 700);
 	printf("Retval is: %d should be: %d \n", retval, 0);
-//	
-//	retval = add_c_buff_data(&ptr, 800);
-//	printf("Retval is: %d should be: %d \n", retval, 0);
-//
-//	retval = add_c_buff_data(&ptr, 900);
-//	printf("Retval is: %d should be: %d \n", retval, -4);
 	
 	dump_c_buff(&ptr);
 
-
+	retval = destroy_c_buff(&ptr); 
+	printf("Retval is %d\n", retval);
+	
+	if (!ptr)
+	{
+		printf(" C Buff delete was successful\n\n");
+	}
 
 	printf("\n\n*** DOUBLE_LINK_LIST ***\n");
-	struct dbl_ll_node *d_ptr;
-	d_ptr = (struct dbl_ll_node *) malloc (sizeof(struct dbl_ll_node));
-	d_ptr->next = NULL;
-	d_ptr->prev = NULL;
-	d_ptr->data = 0;
+	struct dbl_ll_node *d_ptr = NULL;
 
-	uint32_t data_val = 0;
+	uint32_t data_val;
 	
-	int32_t size = dbl_ll_size(&d_ptr);
-	printf("Size is %d\n", size);
+	retval = dbl_ll_size(&d_ptr, &data_val);
+	printf("Size is %d and return code is %d\n", data_val, retval );
 
 	retval = add_dbl_ll_node(&d_ptr, 12345, 0);
-	printf("Retval is: %d should be: %d \n", retval, 0);
+	printf("[12345] Retval is: %d should be: %d \n", retval, 0);
 	
-	size = dbl_ll_size(&d_ptr);
-	printf("Size is %d\n", size);
+	retval = dbl_ll_size(&d_ptr, &data_val );
+	printf("Size is %d\n", data_val);
 	
 	retval = add_dbl_ll_node(&d_ptr, 2345, 1);
-	printf("Retval is: %d should be: %d \n", retval, 0);
+	printf("[12345, 2345] Retval is: %d should be: %d \n", retval, 0);
 	
-	size = dbl_ll_size(&d_ptr);
-	printf("Size is %d\n", size);
+	retval = dbl_ll_size(&d_ptr, &data_val);
+	printf("Size is %d\n", data_val);
 	
 	retval = add_dbl_ll_node(&d_ptr, 345, 1);
-	printf("Retval is: %d should be: %d \n", retval, 0);
+	printf("[12345, 345, 2345] Retval is: %d should be: %d \n", retval, 0);
 	
-	size = dbl_ll_size(&d_ptr);
-	printf("Size is %d\n", size);
+	retval = dbl_ll_size(&d_ptr, &data_val);
+	printf("Size is %d\n", data_val);
 
 	retval = add_dbl_ll_node(&d_ptr, 505, 3);
-	printf("Retval is: %d should be: %d \n", retval, 0);
+	printf("[12345,345, 2345, 505] Retval is: %d should be: %d \n", retval, 0);
 
+	retval = add_dbl_ll_node(&d_ptr, 8080, 0);
+	printf("[8080, 12345, 345, 2345, 505 ] Retval is: %d should be: %d \n", retval, 0);
+	
+	retval = add_dbl_ll_node(&d_ptr, 9090, 6);
+	printf("[8080, 12345, 345, 2345, 505 ] Retval is: %d should be: %d \n", retval, -5);
+	
+	retval = add_dbl_ll_node(&d_ptr, 9090, 100);
+	printf("[8080, 12345, 345, 2345, 505 ] Retval is: %d should be: %d \n", retval, -5);
 
 	retval = remove_dbl_ll_node(&d_ptr, &data_val, 2);
-	printf("Data val is: %d should be: %d \n", data_val, 2345);
+	printf("Data val is: %d should be: %d \n", data_val, 345);
 	
-	int32_t index = search_dbl_ll(&d_ptr, 505);
-	printf("Search idx is: %d should be: %d \n", index, 3);
+	retval = search_dbl_ll(&d_ptr, &data_val, 505);
+	printf("Search idx is: %d should be: %d \n", data_val, 2);
 	
-	index = search_dbl_ll(&d_ptr, 2345);
-	printf("Search idx is: %d should be: %d \n", index, -4);
+	retval = search_dbl_ll(&d_ptr, &data_val, 2345);
+	printf("Search idx is: %d should be: %d \n", retval, -4);
 	
-	index = search_dbl_ll(&d_ptr, 12345);
-	printf("Search idx is: %d should be: %d \n", index, 1);
+	retval = search_dbl_ll(&d_ptr, &data_val, 8080);
+	printf("Search idx is: %d should be: %d \n", data_val, 0);
 
-	size = dbl_ll_size(&d_ptr);
-	printf("size is %d\n", size);
+	retval = dbl_ll_size(&d_ptr, &data_val);
+	printf("size is %d\n", data_val);
 	
+	retval = remove_dbl_ll_node(&d_ptr, &data_val, 8);
+	printf("Retval is: %d should be: %d \n", retval, -5);
+
 	retval = destroy_dbl_ll(&d_ptr);
 	printf("Retval is: %d should be: %d \n", retval, 0);
 	
@@ -115,8 +119,8 @@ int main()
 		printf("Delete was successful\n\n");
 	}
 	
-	size = dbl_ll_size(&d_ptr);
-	printf("size is %d\n", size);
+	retval = dbl_ll_size(&d_ptr, &data_val);
+	printf("size retcode is %d and val is is %d\n", retval, data_val);
 
 }
 
