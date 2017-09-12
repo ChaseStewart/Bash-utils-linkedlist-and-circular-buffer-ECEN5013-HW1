@@ -42,7 +42,6 @@ circ_buff_status_t allocate_c_buff(struct c_node **ptr, uint32_t size){
 	/* check whether struct malloc was successful */
 	if (!(*ptr))
 	{
-		printf("ERROR: Cannot allocate array\n");
 		return C_CANNOT_ALLOC;
 	}
 
@@ -53,7 +52,6 @@ circ_buff_status_t allocate_c_buff(struct c_node **ptr, uint32_t size){
 	/* check whether buffer malloc was successful */
 	if (!buffer)
 	{
-		printf("ERROR: Cannot allocate buffer\n");
 		return C_CANNOT_ALLOC;
 	}
 
