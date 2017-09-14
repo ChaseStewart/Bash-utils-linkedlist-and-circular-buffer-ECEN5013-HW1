@@ -23,5 +23,5 @@ all:
 .PHONY: clean
 
 clean:
-	@rm -vf test
+	@rm -vf unit_test
 	@echo Test Executable Removed!
