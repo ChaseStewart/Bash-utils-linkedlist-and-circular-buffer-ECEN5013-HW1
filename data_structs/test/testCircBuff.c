@@ -83,13 +83,40 @@ void test_size_c_buff(void)
 void test_remove_c_buff(void)
 {
 	struct c_node *ptr=NULL;
+
+	/* allocate buffer */
 	TEST_ASSERT_NULL(ptr);
 	allocate_c_buff(&ptr, 4);
+	
+	/* fill buffer */
 	TEST_ASSERT_EQUAL_INT32( 0, add_c_buff_data(&ptr, 1));
 	TEST_ASSERT_EQUAL_INT32( 0, add_c_buff_data(&ptr, 1));
 	TEST_ASSERT_EQUAL_INT32( 0, add_c_buff_data(&ptr, 1));
 	TEST_ASSERT_EQUAL_INT32( 0, add_c_buff_data(&ptr, 1));
-	TEST_ASSERT_EQUAL_INT32(-4, add_c_buff_data(&ptr, 1));
+	
+	/* fill buffer */
+	TEST_ASSERT_EQUAL_INT32( 4, c_buff_size(&ptr));
+	TEST_ASSERT_EQUAL_INT32( 0, remove_c_buff_data(&ptr));
+	
+	/* fill buffer */
+	TEST_ASSERT_EQUAL_INT32( 3, c_buff_size(&ptr));
+	TEST_ASSERT_EQUAL_INT32( 0, remove_c_buff_data(&ptr));
+	
+	/* fill buffer */
+	TEST_ASSERT_EQUAL_INT32( 2, c_buff_size(&ptr));
+	TEST_ASSERT_EQUAL_INT32( 0, remove_c_buff_data(&ptr));
+	
+	/* fill buffer */
+	TEST_ASSERT_EQUAL_INT32( 1, c_buff_size(&ptr));
+	TEST_ASSERT_EQUAL_INT32( 0, remove_c_buff_data(&ptr));
+	
+	/* fill buffer */
+	TEST_ASSERT_EQUAL_INT32( 0, c_buff_size(&ptr));
+	
+	/* fill buffer */
+	TEST_ASSERT_EQUAL_INT32(-5, remove_c_buff_data(&ptr));
+	TEST_ASSERT_EQUAL_INT32( 0, c_buff_size(&ptr));
+
 }
 
 void test_c_buff_full_and_empty(void)

@@ -97,6 +97,8 @@ dbl_ll_status_t add_dbl_ll_node(struct dbl_ll_node **ptr, uint32_t value, uint32
 	/* if idx 0 was provided, set first node to this new node */
 	if (idx == 0)
 	{
+
+		temp->prev = new_node;
 		new_node->next = temp;
 		(*ptr) = new_node;
 		return DBL_SUCCESS;

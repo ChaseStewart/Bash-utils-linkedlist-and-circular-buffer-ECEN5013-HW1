@@ -79,6 +79,7 @@ void test_remove_dbl_ll(void)
 	
 	TEST_ASSERT_EQUAL_INT32(-5, remove_dbl_ll_node(&d_ptr, &data_val, 5));
 	TEST_ASSERT_EQUAL_INT32( 0, remove_dbl_ll_node(&d_ptr, &data_val, 4));
+	TEST_ASSERT_EQUAL_INT32( 0, remove_dbl_ll_node(&d_ptr, &data_val, 3));
 	TEST_ASSERT_EQUAL_INT32( 0, remove_dbl_ll_node(&d_ptr, &data_val, 2));
 	TEST_ASSERT_EQUAL_INT32( 0, remove_dbl_ll_node(&d_ptr, &data_val, 0));
 
