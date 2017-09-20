@@ -15,22 +15,57 @@
  * The file also contains methods to add, remove, search, destroy, and count the linked list, one node at a time.
  *
  * @author Chase E Stewart
- * @date Sept 13 2017
- * @version 1.1
+ * @date Sept 19 2017
+ * @version 1.0
  *
  */
 
 #ifndef __MY_UNIT_DBL_LINKLIST_H__
 #define __MY_UNIT_DBL_LINKLIST_H__
 
+/*
+ * @brief test destroy dbl_ll
+ *
+ * @param none
+ *
+ * @return none
+ */
 void test_destroy_dbl_ll(void);
 
+/*
+ * @brief test add to dbl_ll
+ *
+ * @param none
+ *
+ * @return none
+ */
 void test_add_dbl_ll(void);
 
+/*
+ * @brief test remove dbl_ll
+ *
+ * @param none
+ *
+ * @return none
+ */
 void test_remove_dbl_ll(void);
 
+/*
+ * @brief test size dbl_ll
+ *
+ * @param none
+ *
+ * @return none
+ */
 void test_size_dbl_ll(void);
 
+/*
+ * @brief test search dbl_ll
+ *
+ * @param none
+ *
+ * @return none
+ */
 void test_search_dbl_ll(void);
 
 #endif /* end __MY_UNIT_DBL_LINKLIST_H__ */
