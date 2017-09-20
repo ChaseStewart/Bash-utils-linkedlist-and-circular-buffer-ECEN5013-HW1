@@ -180,13 +180,27 @@ void test_search_dbl_ll(void)
 	TEST_ASSERT_NULL(d_ptr);
 	TEST_ASSERT_EQUAL_INT32(-1, dbl_ll_size(&d_ptr, &data_val ));
 	TEST_ASSERT_EQUAL_INT32(0, data_val );
+	/* test search on invalid ll */
+	TEST_ASSERT_EQUAL_INT32(-1, search_dbl_ll(&d_ptr, &data_val, 1));
 	TEST_ASSERT_EQUAL_INT32(0, add_dbl_ll_node(&d_ptr, 1, 0));
 	TEST_ASSERT_EQUAL_INT32(0, add_dbl_ll_node(&d_ptr, 2, 0));
 	TEST_ASSERT_EQUAL_INT32(0, add_dbl_ll_node(&d_ptr, 3, 0));
 	TEST_ASSERT_EQUAL_INT32(0, add_dbl_ll_node(&d_ptr, 4, 0));
 	TEST_ASSERT_EQUAL_INT32(0, add_dbl_ll_node(&d_ptr, 5, 0));
-	TEST_ASSERT_EQUAL_INT32(0, dbl_ll_size(&d_ptr, &data_val ));
-	TEST_ASSERT_EQUAL_INT32(5, data_val );
+
+	/* list holds [5,4,3,2,1] */
+
+	/* test search on first idx of valid ll */
+	TEST_ASSERT_EQUAL_INT32(0, search_dbl_ll(&d_ptr, &data_val, 1));
+	TEST_ASSERT_EQUAL_INT32(4, data_val );
+
+	/* test search on middle idx of valid ll */
+	TEST_ASSERT_EQUAL_INT32(0, search_dbl_ll(&d_ptr, &data_val, 3));
+	TEST_ASSERT_EQUAL_INT32(2, data_val );
+	
+	/* test search on invalid idx of valid ll */
+	TEST_ASSERT_EQUAL_INT32(-4, search_dbl_ll(&d_ptr, &data_val, 8));
+	TEST_ASSERT_EQUAL_INT32(0, data_val );
 
 }
 
