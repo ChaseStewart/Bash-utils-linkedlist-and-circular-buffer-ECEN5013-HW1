@@ -61,7 +61,7 @@ struct c_node {
  *
  * @return circ_buff_status - enum of status
  */
-circ_buff_status_t allocate_c_buff(struct c_node **ptr, uint32_t size);
+circ_buff_status_t allocate_c_buff(struct c_node **ptr, int32_t size);
 
 /**
  * @brief destroy an already-allocated circ-buffer

@@ -34,7 +34,7 @@
  *
  * @return circ_buff_status - enum of status
  */
-circ_buff_status_t allocate_c_buff(struct c_node **ptr, uint32_t size){
+circ_buff_status_t allocate_c_buff(struct c_node **ptr, int32_t size){
 
 	/* allocate struct pointer, else error */
 	(*ptr) = (struct c_node *)malloc(sizeof(struct c_node));
