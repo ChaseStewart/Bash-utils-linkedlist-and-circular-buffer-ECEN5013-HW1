@@ -11,6 +11,6 @@ This repository holds two bash utilities (build_kernel and system_info) as well 
 The C libraries follow the CU Boulder Embedded Systems Engineering C-Coding and HDL Style Guideline.
 
 ## Usage:
-For the bash utilities, add them to your path, or use my [common_deploy ansible script](https://github.com/ECEN5013_common_deploy), and then use `system_info` or `build_kernel` to run.
+For the bash utilities, add them to your path, or use my [common_deploy ansible script](https://github.com/ChaseStewart/ECEN5013_common_deploy), and then use `system_info` or `build_kernel` to run.
 
 For the C libraries, link them into a project and then use their provided functions.
